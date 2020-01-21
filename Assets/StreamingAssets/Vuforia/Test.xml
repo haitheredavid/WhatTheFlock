@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="smalloffice2" size="1.000000 0.946981" />
+    <ImageTarget name="sharedoffice2" size="1.000000 0.951025" />
+    <ImageTarget name="personaloffice2" size="1.000000 1.020408" />
+    <ImageTarget name="lecture2" size="1.000000 1.111283" />
+    <ImageTarget name="classroom2" size="1.000000 1.072327" />
+    <ImageTarget name="auditorium2" size="1.000000 0.920235" />
+    <ImageTarget name="lobby3" size="1.000000 1.159961" />
+    <ImageTarget name="start" size="1.000000 0.995833" />
+    <ImageTarget name="end" size="1.000000 1.000000" />
+  </Tracking>
+</QCARConfig>

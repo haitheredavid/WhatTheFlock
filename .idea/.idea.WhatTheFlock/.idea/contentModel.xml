@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\dmorgan\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\dmorgan\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_WhatTheFlock.2039124987.00" t="ExcludeRecursive" />
+    <e p="C:\Users\dmorgan\Documents\Current\BirdStrike\WhatTheFlock\WhatTheFlock" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="myScripts" t="Include">
+          <e p="AgentManager.cs" t="Include" />
+          <e p="CameraPosition.cs" t="Include" />
+          <e p="FlockHandler.cs" t="Include" />
+          <e p="MeshGenerator.cs" t="Include" />
+          <e p="MouseSelection.cs" t="Include" />
+          <e p="NavMeshSourceTag.cs" t="Include" />
+          <e p="NavMeshWatcher.cs" t="Include" />
+          <e p="Room.cs" t="Include" />
+          <e p="RoomImporter.cs" t="Include" />
+          <e p="RoomManager.cs" t="Include" />
+          <e p="RoomTracker.cs" t="Include" />
+          <e p="Test.cs" t="Include" />
+        </e>
+        <e p="StreamingAssets" t="Include">
+          <e p="Vuforia" t="Include">
+            <e p="Test.xml" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+      <e p="WhatTheFlock.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>
