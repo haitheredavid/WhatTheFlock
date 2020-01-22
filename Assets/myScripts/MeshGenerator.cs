@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 
-public static class PathHelper {
+public static class Meshy {
 
     public static Vector3 Quantize( Vector3 v, Vector3 q ) {
         float x = q.x * Mathf.Floor( v.x / q.x );
@@ -14,54 +9,46 @@ public static class PathHelper {
         return new Vector3( x, y, z );
     }
 
-    public static float3 Quantize( float3 v, float3 q ) {
-        float x = q.x * Mathf.Floor( v.x / q.x );
-        float y = q.x * Mathf.Floor( v.y / q.y );
-        float z = q.x * Mathf.Floor( v.z / q.z );
-        return new float3( x, y, z );
-    }
-
     public static Bounds QauntizeBounds( Vector3 center, Vector3 size, float factor ) {
         return new Bounds( Quantize( center, factor * size ), size );
     }
 
-    public static IEnumerator GenerateVertices( int xAmount, int yAmount, float time ) {
-        float3[ ] verts = new float3[ ( xAmount + 1 ) * ( yAmount + 1 ) ];
+    public static Vector3[ ] GenerateVertices( int xAmount, int zAmount, Vector3 loc ) {
+        Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( zAmount + 1 ) ];
 
-        for ( int i = 0, y = 0; y <= yAmount; y++ ) {
+        for ( int i = 0, y = 0; y <= zAmount; y++ ) {
             for ( int x = 0; x <= xAmount; x++, i++ ) {
-                verts[ i ] = new float3( x, y, 0 );
-                yield return new WaitForSeconds( time );
-            }
-        }
-        yield return verts;
-    }
-
-    public static Vector3[ ] GenerateVertices( int xAmount, int yAmount ) {
-        Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( yAmount + 1 ) ];
-
-        for ( int i = 0, y = 0; y <= yAmount; y++ ) {
-            for ( int x = 0; x <= xAmount; x++, i++ ) {
-                verts[ i ] = new Vector3( x, y, 0 );
+                verts[ i ] = new Vector3( x, 0, y ) + loc;
             }
         }
         return verts;
     }
 
-    public static Mesh GenerateMesh( int xAmount, int yAmount ) {
-        Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( yAmount + 1 ) ];
-        Vector2[ ] uvs = new Vector2[ verts.Length ];
+    public static Vector3[ ] GenerateVertices( int xAmount, int zAmount, float xSize, float zSize, Vector3 loc ) {
+        Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( zAmount + 1 ) ];
 
-        for ( int y = 0, i = 0; y <= yAmount; y++ ) {
+        for ( int i = 0, z = 0; z <= zAmount; z++ ) {
             for ( int x = 0; x <= xAmount; x++, i++ ) {
-                verts[ i ] = new Vector3( x, y, 0 );
-                uvs[ i ] = new Vector2( (float) x / xAmount, (float) y / yAmount );
+                verts[ i ] = new Vector3( (float) x / xAmount * xSize, 0, (float) z / zAmount * zSize ) + loc;
             }
         }
-        int[ ] tri = new int[ xAmount * yAmount * 6 ];
+        return verts;
+    }
+
+    public static Mesh GenerateMesh( int xAmount, int zAmount, float xSize, float zSize, Vector3 loc ) {
+        Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( zAmount + 1 ) ];
+        Vector2[ ] uvs = new Vector2[ verts.Length ];
+
+        for ( int z = 0, i = 0; z <= zAmount; z++ ) {
+            for ( int x = 0; x <= xAmount; x++, i++ ) {
+                verts[ i ] = new Vector3( (float) x / xAmount * xSize, 0, (float) z / zAmount * zSize ) + loc;
+                uvs[ i ] = new Vector2( (float) x / xAmount, (float) z / zAmount );
+            }
+        }
+        int[ ] tri = new int[ xAmount * zAmount * 6 ];
         Mesh mesh = new Mesh {name = "Procedural Mesh", vertices = verts};
 
-        for ( int ti = 0, vi = 0, y = 0; y < yAmount; y++, vi++ ) {
+        for ( int ti = 0, vi = 0, y = 0; y < zAmount; y++, vi++ ) {
             for ( int x = 0; x < xAmount; x++, ti += 6, vi++ ) {
                 tri[ ti ] = vi;
                 tri[ ti + 3 ] = tri[ ti + 2 ] = vi + 1;
@@ -73,6 +60,40 @@ public static class PathHelper {
         mesh.uv = uvs;
         mesh.RecalculateNormals( );
         return mesh;
+    }
+
+    public static Mesh GenerateMesh( int xAmount, int zAmount, Vector3 loc ) {
+        Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( zAmount + 1 ) ];
+        Vector2[ ] uvs = new Vector2[ verts.Length ];
+
+        for ( int y = 0, i = 0; y <= zAmount; y++ ) {
+            for ( int x = 0; x <= xAmount; x++, i++ ) {
+                verts[ i ] = new Vector3( x, 0, y ) + loc;
+                uvs[ i ] = new Vector2( (float) x / xAmount, (float) y / zAmount );
+            }
+        }
+        int[ ] tri = new int[ xAmount * zAmount * 6 ];
+        Mesh mesh = new Mesh {name = "Procedural Mesh", vertices = verts};
+
+        for ( int ti = 0, vi = 0, y = 0; y < zAmount; y++, vi++ ) {
+            for ( int x = 0; x < xAmount; x++, ti += 6, vi++ ) {
+                tri[ ti ] = vi;
+                tri[ ti + 3 ] = tri[ ti + 2 ] = vi + 1;
+                tri[ ti + 4 ] = tri[ ti + 1 ] = vi + xAmount + 1;
+                tri[ ti + 5 ] = vi + xAmount + 2;
+            }
+        }
+        mesh.triangles = tri;
+        mesh.uv = uvs;
+        mesh.RecalculateNormals( );
+        return mesh;
+    }
+
+    public static GameObject GenerateMeshObj( ) {
+        GameObject meshObj = new GameObject( "mesh" );
+        meshObj.AddComponent<MeshRenderer>( );
+        meshObj.AddComponent<MeshFilter>( );
+        return meshObj;
     }
 
 }
@@ -102,19 +123,15 @@ public class MeshGenerator : MonoBehaviour {
     public int ySize;
     public Material meshMaterial;
     public float pointScale = 0.1f;
-    public float delayTime = 0.1f;
-    private Mesh _mesh;
     private GameObject _meshObj;
     private Vector3[ ] _vertices;
 
-    void Start( ) {
+    private void Start( ) {
         // build mesh object 
-        _meshObj = new GameObject( "mesh" );
-        _meshObj.AddComponent<MeshRenderer>( );
-        _meshObj.AddComponent<MeshFilter>( );
-        _vertices = PathHelper.GenerateVertices( xSize, ySize );
-        _meshObj.GetComponent<MeshFilter>( ).mesh = PathHelper.GenerateMesh( xSize, ySize );
+        _meshObj = Meshy.GenerateMeshObj( );
+        _meshObj.GetComponent<MeshFilter>( ).mesh = Meshy.GenerateMesh( xSize, ySize, transform.position );
         _meshObj.GetComponent<MeshRenderer>( ).material = meshMaterial;
+        _vertices = Meshy.GenerateVertices( xSize, ySize, transform.position );
     }
 
     private void OnDrawGizmos( ) {
