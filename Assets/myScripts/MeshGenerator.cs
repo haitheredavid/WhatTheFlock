@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using myScripts;
+using UnityEngine;
 
 public static class Meshy {
 
@@ -96,8 +99,44 @@ public static class Meshy {
         return meshObj;
     }
 
+    public static Bounds EncapsulateBounds( this IEnumerable<Renderer> renderers ) {
+        return renderers.Select( mesh => mesh.bounds ).Encapsulation( );
+    }
+
+    public static Bounds EncapsulateBounds( this IEnumerable<Mesh> meshes ) {
+        return meshes.Select( mesh => mesh.bounds ).Encapsulation( );
+    }
+
+    private static Bounds Encapsulation( this IEnumerable<Bounds> bounds ) {
+        return bounds.Aggregate( ( encapsulation, next ) => {
+            encapsulation.Encapsulate( next );
+            return encapsulation;
+        } );
+    }
+
+    public static List<MeshRenderer> FindMeshRenderer( GameObject obj ) {
+        List<MeshRenderer> temp = new List<MeshRenderer>( );
+
+        foreach ( Transform c1 in obj.transform ) {
+            MeshRenderer c1mesh = c1.transform.GetComponent<MeshRenderer>( );
+
+            if ( c1mesh != null ) {
+                temp.Add( c1mesh );
+            }
+
+            if ( c1.transform.childCount > 0 ) {
+                List<MeshRenderer> childMeshes = FindMeshRenderer( c1.gameObject );
+
+                foreach ( var m in childMeshes ) {
+                    temp.Add( m );
+                }
+            }
+        }
+        return temp;
+    }
+
 }
-public static class SelectionHelper {
+public static class CheckArea {
 
     public static bool IsWithinTriangle( Vector3 p, Vector3 p1, Vector3 p2, Vector3 p3 ) {
         bool isWithin = false;
@@ -123,19 +162,55 @@ public class MeshGenerator : MonoBehaviour {
     public int ySize;
     public Material meshMaterial;
     public float pointScale = 0.1f;
+    public RectTransform selectRect;
     private GameObject _meshObj;
     private Vector3[ ] _vertices;
+    private List<MeshRenderer> _tempMeshes = new List<MeshRenderer>( );
+    private GameObject[ ] _tempObjs;
+    private Bounds _bounds;
+    private MouseSelection _selection;
+    private Vector3[ ] _selRect;
+    private Vector3 _selSize;
+    private Vector3 _selStart;
 
     private void Start( ) {
-        // build mesh object 
+        _tempObjs = GameObject.FindGameObjectsWithTag( "BlueGoal" );
         _meshObj = Meshy.GenerateMeshObj( );
-        _meshObj.GetComponent<MeshFilter>( ).mesh = Meshy.GenerateMesh( xSize, ySize, transform.position );
-        _meshObj.GetComponent<MeshRenderer>( ).material = meshMaterial;
-        _vertices = Meshy.GenerateVertices( xSize, ySize, transform.position );
+        _selection = new MouseSelection( selectRect, Camera.main, LayerMask.GetMask( "Ground" ) );
+    }
+
+    private void Update( ) {
+        List<MeshRenderer> added = new List<MeshRenderer>( );
+
+        foreach ( var o in _tempObjs ) {
+            added = Meshy.FindMeshRenderer( o );
+
+            foreach ( var m in added ) {
+                _tempMeshes.Add( m );
+            }
+        }
+
+        if ( _tempMeshes.Count > 0 ) {
+            _bounds = _tempMeshes.EncapsulateBounds( );
+        }
+        _selection.CheckSelection( );
+        _selRect = _selection.SelectionBounds;
+        _selSize = _selection.SelectionSize;
+        _selStart = _selection.StartPosition;
+
+        if ( _selRect != null ) {
+            Debug.Log( "draw mesh" );
+            _meshObj.GetComponent<MeshFilter>( ).mesh = Meshy.GenerateMesh( xSize, ySize, _selSize.x, _selSize.z, _selStart );
+            _meshObj.GetComponent<MeshRenderer>( ).material = meshMaterial;
+        }
+        Debug.DrawLine( _bounds.max, _bounds.min, Color.blue );
     }
 
     private void OnDrawGizmos( ) {
         Gizmos.color = Color.black;
+
+        // draw points of the box and class for drawing the lines
+        Gizmos.DrawWireCube( _bounds.center, _bounds.size );
         if ( _vertices == null ) return;
 
         for ( int i = 0; i < _vertices.Length; i++ ) {

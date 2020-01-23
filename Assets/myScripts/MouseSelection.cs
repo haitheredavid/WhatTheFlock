@@ -10,6 +10,7 @@ namespace myScripts {
             _selectionRect.gameObject.SetActive( false );
             _camera = cam;
             _mask = mask;
+            drawDebug = false;
         }
 
         private Vector3[ ] _createdRectPoints = new Vector3[ 4 ];
@@ -23,15 +24,8 @@ namespace myScripts {
         private readonly LayerMask _mask;
         private readonly RectTransform _selectionRect;
         public bool drawDebug { get; set; }
-        public Vector3 SelectionSize {
-            get {
-                if ( !_createdBounds ) {
-                    Debug.Log( "Bounds is not ready" );
-                    return Vector3.zero;
-                }
-                return _selSize;
-            }
-        }
+        public Vector3 SelectionSize => !_createdBounds ? Vector3.zero : _selSize;
+        public Vector3 StartPosition => !_createdBounds ? Vector3.zero :_rectStartPoint;
         public Vector3[ ] SelectionBounds {
             get {
                 if ( !_createdBounds ) {
@@ -42,7 +36,7 @@ namespace myScripts {
             }
         }
 
-        public void SelectObjects( ) {
+        public void CheckSelection( ) {
             bool isHoldingDown = false;
 
             // when input has been triggered
