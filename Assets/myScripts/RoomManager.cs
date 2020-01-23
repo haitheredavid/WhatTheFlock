@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using myScript;
 using UnityEngine;
 
-namespace myScript {
+namespace myScripts {
     public enum Parts {
 
         Wall,

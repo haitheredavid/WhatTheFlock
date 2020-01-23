@@ -1,7 +1,7 @@
 using UnityEngine;
 using Vuforia;
 
-namespace myScript {
+namespace myScripts {
     public class Room {
 
         public GameObject startPoint;

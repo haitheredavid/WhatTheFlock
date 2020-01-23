@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace myScript {
+namespace myScripts {
     public class NavMeshWatcher : MonoBehaviour {
 
         public float factor = .01f;
@@ -37,7 +37,7 @@ namespace myScript {
             _navInstance = NavMesh.AddNavMeshData( _navMesh );
             var settings = NavMesh.GetSettingsByID( 0 );
             NavMeshSourceTag.Collect( ref _sources );
-            var bounds = Meshy.QauntizeBounds( _center, size, factor );
+            var bounds = GeoHelper.QauntizeBounds( _center, size, factor );
 
             if ( asyync )
                 _operation = NavMeshBuilder.UpdateNavMeshDataAsync( _navMesh, settings, _sources, bounds );
@@ -69,7 +69,7 @@ namespace myScript {
         }
 
         private Bounds GetBounds( ) {
-            return Meshy.QauntizeBounds( _center, size, factor );
+            return GeoHelper.QauntizeBounds( _center, size, factor );
         }
 
     }

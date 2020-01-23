@@ -2,9 +2,8 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
-using Vuforia;
 
-namespace myScript {
+namespace myScripts {
     public class FlockHandler : MonoBehaviour {
 
         public static FlockHandler Instance { get; set; }

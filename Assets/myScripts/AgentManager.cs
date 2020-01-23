@@ -1,4 +1,4 @@
-namespace dTestField {
+namespace myScripts {
     public class AgentManager {
 
         

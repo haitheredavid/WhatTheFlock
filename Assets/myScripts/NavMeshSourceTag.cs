@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace myScript {
+namespace myScripts {
     public class NavMeshSourceTag : MonoBehaviour {
 
         private static List<MeshFilter> _meshes = new List<MeshFilter>( );

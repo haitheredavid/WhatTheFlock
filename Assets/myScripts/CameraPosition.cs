@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace myScript {
+namespace myScripts {
     public class CameraPosition : MonoBehaviour {
 
         public Transform Pos { get; private set; }
