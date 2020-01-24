@@ -18,7 +18,7 @@ namespace myScripts {
             _meshContainer = temp.AddComponent<MeshContainer>( );
             _meshContainer.MeshMaterial = meshMaterial;
             _meshContainer.Verts = new Vector2( xAmount, yAmount );
-            _meshContainer.UpdateMeshContainer( _tagName );
+            _meshContainer.SetMeshContainer( _tagName );
         }
 
         public void Update( ) {
@@ -28,7 +28,7 @@ namespace myScripts {
             instance.tag = _tagName;
             instance.name = "instance";
             instance.transform.position = new Vector3( Random.Range( -10, 10 ), Random.Range( -10, 10 ), Random.Range( -10, 10 ) );
-            _meshContainer.UpdateMeshContainer( _tagName );
+            _meshContainer.SetMeshContainer( _tagName );
         }
 
     }
