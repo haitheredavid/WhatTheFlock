@@ -4,12 +4,14 @@ using Random = UnityEngine.Random;
 namespace myScripts {
     public class SceneHandler : MonoBehaviour {
 
-        public Material meshMaterial;
         public int xAmount;
         public int yAmount;
+        public Material meshMaterial;
         public RectTransform selectRect;
+
+        // private stuff
         private MeshContainer _meshContainer;
-        private string _tagName = "BlueGoal";
+        private readonly string _tagName = "BlueGoal";
 
         public void Start( ) {
             GameObject temp = new GameObject( );

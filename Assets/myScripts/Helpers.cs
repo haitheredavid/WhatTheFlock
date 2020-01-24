@@ -3,7 +3,29 @@ using System.Linq;
 using UnityEngine;
 
 namespace myScripts {
-    public static class GeoHelper {
+    public static class ObjHelper {
+
+        public static List<MeshRenderer> FindMeshRenderer( GameObject c0 ) {
+            List<MeshRenderer> temp = new List<MeshRenderer>( );
+            MeshRenderer c0mesh = c0.transform.GetComponent<MeshRenderer>( );
+
+            if ( c0mesh != null ) {
+                temp.Add( c0mesh );
+            }
+            if ( c0.transform.childCount <= 0 ) return temp;
+
+            foreach ( Transform c1 in c0.transform ) {
+                List<MeshRenderer> childMeshes = FindMeshRenderer( c1.gameObject );
+
+                foreach ( var m in childMeshes ) {
+                    temp.Add( m );
+                }
+            }
+            return temp;
+        }
+
+    }
+    public static class BoundsHelper {
 
         public static Vector3 Quantize( Vector3 v, Vector3 q ) {
             float x = q.x * Mathf.Floor( v.x / q.x );
@@ -15,6 +37,24 @@ namespace myScripts {
         public static Bounds QauntizeBounds( Vector3 center, Vector3 size, float factor ) {
             return new Bounds( Quantize( center, factor * size ), size );
         }
+
+        public static Bounds EncapsulateBounds( this IEnumerable<Renderer> renderers ) {
+            return renderers.Select( mesh => mesh.bounds ).Encapsulation( );
+        }
+
+        public static Bounds EncapsulateBounds( this IEnumerable<Mesh> meshes ) {
+            return meshes.Select( mesh => mesh.bounds ).Encapsulation( );
+        }
+
+        private static Bounds Encapsulation( this IEnumerable<Bounds> bounds ) {
+            return bounds.Aggregate( ( encapsulation, next ) => {
+                encapsulation.Encapsulate( next );
+                return encapsulation;
+            } );
+        }
+
+    }
+    public static class PointHelper {
 
         public static Vector3[ ] GenerateVertices( int xAmount, int zAmount, Vector3 loc ) {
             Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( zAmount + 1 ) ];
@@ -37,6 +77,9 @@ namespace myScripts {
             }
             return verts;
         }
+
+    }
+    public static class MeshHelper {
 
         public static Mesh GenerateMesh( int xAmount, int zAmount, float xSize, float zSize, Vector3 loc ) {
             Vector3[ ] verts = new Vector3[ ( xAmount + 1 ) * ( zAmount + 1 ) ];
@@ -92,45 +135,25 @@ namespace myScripts {
             return mesh;
         }
 
-        public static GameObject GenerateMeshObj( ) {
-            GameObject meshObj = new GameObject( "mesh" );
-            meshObj.AddComponent<MeshRenderer>( );
-            meshObj.AddComponent<MeshFilter>( );
-            return meshObj;
-        }
+        public static class CheckArea {
 
-        public static Bounds EncapsulateBounds( this IEnumerable<Renderer> renderers ) {
-            return renderers.Select( mesh => mesh.bounds ).Encapsulation( );
-        }
+            public static bool IsWithinTriangle( Vector3 p, Vector3 p1, Vector3 p2, Vector3 p3 ) {
+                bool isWithin = false;
+                float denominator = ( p2.z - p3.z ) * ( p1.x - p3.x ) + ( p3.x - p2.x ) * ( p1.z - p3.z );
+                float a = ( ( p2.z - p3.z ) * ( p.x - p3.x ) + ( p3.x - p2.x ) * ( p.z - p3.z ) ) / denominator;
+                float b = ( ( p3.z - p1.z ) * ( p.x - p3.x ) + ( p1.x - p3.x ) * ( p.z - p3.z ) ) / denominator;
+                float c = 1 - a - b;
 
-        public static Bounds EncapsulateBounds( this IEnumerable<Mesh> meshes ) {
-            return meshes.Select( mesh => mesh.bounds ).Encapsulation( );
-        }
-
-        private static Bounds Encapsulation( this IEnumerable<Bounds> bounds ) {
-            return bounds.Aggregate( ( encapsulation, next ) => {
-                encapsulation.Encapsulate( next );
-                return encapsulation;
-            } );
-        }
-
-        public static List<MeshRenderer> FindMeshRenderer( GameObject c0 ) {
-            List<MeshRenderer> temp = new List<MeshRenderer>( );
-            MeshRenderer c0mesh = c0.transform.GetComponent<MeshRenderer>( );
-
-            if ( c0mesh != null ) {
-                temp.Add( c0mesh );
-            }
-            if ( c0.transform.childCount <= 0 ) return temp;
-
-            foreach ( Transform c1 in c0.transform ) {
-                List<MeshRenderer> childMeshes = FindMeshRenderer( c1.gameObject );
-
-                foreach ( var m in childMeshes ) {
-                    temp.Add( m );
+                // the point is within the tri if 
+                // 0 <= a <= 1
+                // 0 <= b <= 1 
+                // 0 <= c <= 1
+                if ( a >= 0f && a <= 1f && b >= 0f && b <= 1f && c > 0f && c <= 1f ) {
+                    isWithin = true;
                 }
+                return isWithin;
             }
-            return temp;
+
         }
 
     }

@@ -37,7 +37,7 @@ namespace myScripts {
             _navInstance = NavMesh.AddNavMeshData( _navMesh );
             var settings = NavMesh.GetSettingsByID( 0 );
             NavMeshSourceTag.Collect( ref _sources );
-            var bounds = GeoHelper.QauntizeBounds( _center, size, factor );
+            var bounds = BoundsHelper.QauntizeBounds( _center, size, factor );
 
             if ( asyync )
                 _operation = NavMeshBuilder.UpdateNavMeshDataAsync( _navMesh, settings, _sources, bounds );
@@ -69,7 +69,7 @@ namespace myScripts {
         }
 
         private Bounds GetBounds( ) {
-            return GeoHelper.QauntizeBounds( _center, size, factor );
+            return BoundsHelper.QauntizeBounds( _center, size, factor );
         }
 
     }

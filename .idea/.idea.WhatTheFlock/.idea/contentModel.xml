@@ -11,7 +11,7 @@
           <e p="CameraPosition.cs" t="Include" />
           <e p="FlockHandler.cs" t="Include" />
           <e p="Geo.cs" t="Include" />
-          <e p="GeoHelper.cs" t="Include" />
+          <e p="Helpers.cs" t="Include" />
           <e p="MeshContainer.cs" t="Include" />
           <e p="MouseSelection.cs" t="Include" />
           <e p="NavMeshSourceTag.cs" t="Include" />
@@ -21,6 +21,7 @@
           <e p="RoomManager.cs" t="Include" />
           <e p="RoomTracker.cs" t="Include" />
           <e p="SceneHandler.cs" t="Include" />
+          <e p="StateManager.cs" t="Include" />
         </e>
         <e p="StreamingAssets" t="Include">
           <e p="Vuforia" t="Include">

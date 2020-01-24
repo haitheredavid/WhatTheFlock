@@ -33,7 +33,7 @@ namespace myScripts {
             List<MeshRenderer> added = new List<MeshRenderer>( );
 
             foreach ( var o in tempObjs ) {
-                added = GeoHelper.FindMeshRenderer( o );
+                added = ObjHelper.FindMeshRenderer( o );
 
                 foreach ( var m in added ) {
                     _storedMeshes.Add( m );
@@ -45,31 +45,11 @@ namespace myScripts {
             if ( _storedMeshes.Count <= 0 ) return;
 
             Bounds tempBounds = _storedMeshes.EncapsulateBounds( );
-            Geo.BasicBox tempBox = new Geo.BasicBox( tempBounds.center, tempBounds.extents, tempBounds.size );
-            GetComponent<MeshFilter>( ).mesh = GeoHelper.GenerateMesh( xVerts, yVerts, tempBox.Size.x, tempBox.Size.z, tempBox.Bot_BL );
+            BasicBox tempBox = new BasicBox( tempBounds.center, tempBounds.extents, tempBounds.size );
+            GetComponent<MeshFilter>( ).mesh = MeshHelper.GenerateMesh( xVerts, yVerts, tempBox.Size.x, tempBox.Size.z, tempBox.Bot_BL );
             GetComponent<MeshRenderer>( ).material = MeshMaterial;
         }
 
     }
 }
 
-public static class CheckArea {
-
-    public static bool IsWithinTriangle( Vector3 p, Vector3 p1, Vector3 p2, Vector3 p3 ) {
-        bool isWithin = false;
-        float denominator = ( p2.z - p3.z ) * ( p1.x - p3.x ) + ( p3.x - p2.x ) * ( p1.z - p3.z );
-        float a = ( ( p2.z - p3.z ) * ( p.x - p3.x ) + ( p3.x - p2.x ) * ( p.z - p3.z ) ) / denominator;
-        float b = ( ( p3.z - p1.z ) * ( p.x - p3.x ) + ( p1.x - p3.x ) * ( p.z - p3.z ) ) / denominator;
-        float c = 1 - a - b;
-
-        // the point is within the tri if 
-        // 0 <= a <= 1
-        // 0 <= b <= 1 
-        // 0 <= c <= 1
-        if ( a >= 0f && a <= 1f && b >= 0f && b <= 1f && c > 0f && c <= 1f ) {
-            isWithin = true;
-        }
-        return isWithin;
-    }
-
-}

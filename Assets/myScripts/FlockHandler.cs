@@ -18,6 +18,8 @@ namespace myScripts {
         public GameObject RedSpawn { private get; set; }
         public GameObject BlueSpawn { private get; set; }
 
+        public List<NavMeshAgent> tempAgents;
+
         // temp toggles for building scene 
         public bool createScene = false;
         public bool runSim = false;
