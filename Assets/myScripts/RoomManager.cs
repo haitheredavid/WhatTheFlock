@@ -49,7 +49,7 @@ namespace myScripts {
 
         private bool _set = false;
 
-        public void Update( ) {
+        public void GetList( ) {
             Debug.Log( "list count " + Trackers.Count );
 
             if ( Trackers.Count > 0 ) {

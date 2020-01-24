@@ -16,11 +16,11 @@
           <e p="MouseSelection.cs" t="Include" />
           <e p="NavMeshSourceTag.cs" t="Include" />
           <e p="NavMeshWatcher.cs" t="Include" />
-          <e p="Room.cs" t="Include" />
           <e p="RoomImporter.cs" t="Include" />
           <e p="RoomManager.cs" t="Include" />
           <e p="RoomTracker.cs" t="Include" />
           <e p="SceneHandler.cs" t="Include" />
+          <e p="Space.cs" t="Include" />
           <e p="StateManager.cs" t="Include" />
         </e>
         <e p="StreamingAssets" t="Include">
