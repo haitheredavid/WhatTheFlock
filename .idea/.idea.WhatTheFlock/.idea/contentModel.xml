@@ -11,11 +11,13 @@
           <e p="CameraPosition.cs" t="Include" />
           <e p="FlockHandler.cs" t="Include" />
           <e p="Geo.cs" t="Include" />
+          <e p="GridObj.cs" t="Include" />
           <e p="Helpers.cs" t="Include" />
           <e p="MeshContainer.cs" t="Include" />
           <e p="MouseSelection.cs" t="Include" />
           <e p="NavMeshSourceTag.cs" t="Include" />
           <e p="NavMeshWatcher.cs" t="Include" />
+          <e p="PathFinder.cs" t="Include" />
           <e p="RoomImporter.cs" t="Include" />
           <e p="RoomManager.cs" t="Include" />
           <e p="RoomTracker.cs" t="Include" />

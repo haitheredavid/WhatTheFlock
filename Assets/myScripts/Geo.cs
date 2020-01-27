@@ -3,11 +3,45 @@ using UnityEngine;
 namespace myScripts {
     public abstract class Geo {
 
-
+        public Vector3 WorldPosition;
 
     }
+    public class Grid : Geo {
+
+        public int X, Y;
+        public float CellRadius;
+        public int[ , ] IntGrid;
+        public Node[ , ] NodeGrid;
+        private float _CellDiameter;
+
+        public Grid( int x, int y, float cellRadius ) {
+            X = x;
+            Y = y;
+            CellRadius = cellRadius;
+            _CellDiameter = CellRadius * 2f;
+        }
+
     
-    
+
+    }
+    public class Node : Geo {
+
+        public bool Walkable;
+        public int GridX;
+        public int GridY;
+        public Node Parent;
+        public int G_Cost;
+        public int H_Cost;
+        public int F_Cost => G_Cost + H_Cost;
+
+        public Node( bool walkable, Vector3 worldPos, int gridX, int gridY ) {
+            Walkable = walkable;
+            WorldPosition = worldPos;
+            GridX = gridX;
+            GridY = gridY;
+        }
+
+    }
     public class BasicBox : Geo {
 
         public Vector3 Extent { get; }
@@ -32,7 +66,7 @@ namespace myScripts {
                 new Vector3( Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z ), // top left
                 new Vector3( Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z ), // top right 
                 new Vector3( Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z ), // bot right 
-                new Vector3( Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z )  // bot left 
+                new Vector3( Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z ) // bot left 
             };
             BottomPoints = new Vector3[ TopPoints.Length ];
 
