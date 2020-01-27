@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace myScripts {
     public class PathFinder : MonoBehaviour {
-
 
         public Transform seeker;
         public Transform target;
@@ -15,29 +16,29 @@ namespace myScripts {
         }
 
         private void Update( ) {
+            if ( !Input.GetKeyDown( KeyCode.K ) ) return;
+
             FindPath( seeker.position, target.position );
         }
 
         private void FindPath( Vector3 startPos, Vector3 targetPos ) {
+            Stopwatch sw = new Stopwatch( );
+            sw.Start( );
             Node startNode = _grid.NodeFromWorldPoint( startPos );
             Node targetNode = _grid.NodeFromWorldPoint( targetPos );
-            List<Node> openSet = new List<Node>( );
+            Heap<Node> openSet = new Heap<Node>(_grid.MaxSize );
             HashSet<Node> closeSet = new HashSet<Node>( );
             openSet.Add( startNode );
 
             while ( openSet.Count > 0 ) {
-                Node currentNode = openSet[ 0 ];
+                Node currentNode = openSet.RemoveFirst(  );
 
-                for ( int i = 1; i < openSet.Count; i++ ) {
-                    if ( openSet[ i ].F_Cost < currentNode.F_Cost || openSet[ i ].F_Cost == currentNode.F_Cost && openSet[ i ].H_Cost < currentNode.H_Cost ) {
-                        currentNode = openSet[ i ];
-                    }
-                }
-                openSet.Remove( currentNode );
+       
                 closeSet.Add( currentNode );
 
                 if ( currentNode == targetNode ) {
-                    Debug.Log( "retracing" );
+                    sw.Stop( );
+                    Debug.Log( "path found " + sw.ElapsedMilliseconds + " ms" );
                     ReTracePath( startNode, targetNode );
                     return;
                 }
@@ -66,11 +67,9 @@ namespace myScripts {
             while ( currentNode != startNode ) {
                 path.Add( currentNode );
                 currentNode = currentNode.Parent;
-                
             }
-            path.Reverse();
+            path.Reverse( );
             _grid.path = path;
-
         }
 
         private int GetDistance( Node nodeA, Node nodeB ) {

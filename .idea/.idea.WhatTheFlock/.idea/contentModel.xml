@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\dmorgan\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\dmorgan\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_WhatTheFlock.1911761960.00" t="ExcludeRecursive" />
-    <e p="C:\Users\dmorgan\Documents\GitHub\WhatTheFlock" t="IncludeRecursive">
+    <e p="C:\Users\dmorgan\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_WhatTheFlock.2115629186.00" t="ExcludeRecursive" />
+    <e p="C:\Users\dmorgan\Documents\Current\WhatTheFlock" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="myScripts" t="Include">
@@ -12,6 +12,7 @@
           <e p="FlockHandler.cs" t="Include" />
           <e p="Geo.cs" t="Include" />
           <e p="GridObj.cs" t="Include" />
+          <e p="Heap.cs" t="Include" />
           <e p="Helpers.cs" t="Include" />
           <e p="MeshContainer.cs" t="Include" />
           <e p="MouseSelection.cs" t="Include" />

@@ -1,3 +1,4 @@
+using System.Net;
 using UnityEngine;
 
 namespace myScripts {
@@ -24,12 +25,13 @@ namespace myScripts {
     
 
     }
-    public class Node : Geo {
+    public class Node : Geo, IHeapItem<Node> {
 
         public bool Walkable;
         public int GridX;
         public int GridY;
         public Node Parent;
+        private int _heapIndex;
         public int G_Cost;
         public int H_Cost;
         public int F_Cost => G_Cost + H_Cost;
@@ -39,6 +41,20 @@ namespace myScripts {
             WorldPosition = worldPos;
             GridX = gridX;
             GridY = gridY;
+        }
+
+        public int CompareTo( Node other ) {
+            int compare = F_Cost.CompareTo( other.F_Cost );
+
+            if ( compare == 0 ) {
+                compare = H_Cost.CompareTo( other.H_Cost );
+            }
+            return -compare;
+        }
+
+        public int HeapIndex {
+            get => _heapIndex;
+            set => _heapIndex = value;
         }
 
     }
