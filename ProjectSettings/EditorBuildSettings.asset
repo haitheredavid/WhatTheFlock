@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/myScenes/b_BasePoc.unity
+    path: Assets/myScenes/test_ArSetup.unity
     guid: aabb548101b3cdc42949e347bf54127c
   m_configObjects: {}
